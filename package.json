@@ -1,0 +1,24 @@
+{
+  "name": "express-warn",
+  "version": "0.1.0",
+  "description": "ExpressJS middleware to warn (debounced) about request properties, like auth token in use that will soon expire\"",
+  "main": "dist",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/Chris927/express-warn.git"
+  },
+  "keywords": [
+    "express",
+    "nodejs",
+    "middleware"
+  ],
+  "author": "chris@uber5.com",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Chris927/express-warn/issues"
+  },
+  "homepage": "https://github.com/Chris927/express-warn#readme"
+}
