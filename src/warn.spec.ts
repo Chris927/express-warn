@@ -8,6 +8,7 @@ describe('warn', () => {
     expect(() => warn()).toThrow(/missing/)
   })
   it('succeeds with just the "key" option', () => {
-    expect(typeof(warn({ key: 'bla' }))).toBe('function')
+    // @ts-ignore
+    expect(typeof(warn({ keyFn: (r: Request) => r['bla'] }))).toBe('function')
   })
 })
