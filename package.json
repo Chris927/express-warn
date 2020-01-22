@@ -4,6 +4,7 @@
   "description": "ExpressJS middleware to warn (debounced) about request properties, like auth token in use that will soon expire\"",
   "main": "dist",
   "scripts": {
+    "build": "babel -d dist/ --extensions '.ts' src/",
     "test": "jest",
     "check-types": "tsc"
   },
@@ -23,6 +24,7 @@
   },
   "homepage": "https://github.com/Chris927/express-warn#readme",
   "devDependencies": {
+    "@babel/cli": "^7.8.3",
     "@babel/core": "^7.8.3",
     "@babel/preset-env": "^7.8.3",
     "@babel/preset-typescript": "^7.8.3",
