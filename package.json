@@ -4,7 +4,8 @@
   "description": "ExpressJS middleware to warn (debounced) about request properties, like auth token in use that will soon expire\"",
   "main": "dist",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "check-types": "tsc"
   },
   "repository": {
     "type": "git",
