@@ -17,7 +17,7 @@ export default (options: Options = {}) => {
   const warningFn = options.warningFn || (() => undefined);
   const log =
     options.log ||
-    ((...args: any[]): void => console.log.apply(["WARN", ...args]));
+    ((...args: any[]): void => console.log.apply(null, ["WARN", ...args]));
   return function(req: Request, res: Response, next: NextFunction) {
     const key = keyFn(req);
     let logger = throttledLoggers.get(key);

@@ -9,10 +9,8 @@
     "test": "jest",
     "check-types": "tsc",
     "clean": "rimraf dist",
-    "run-sample": "nodemon --exec babel-node src/sample.ts -- -r tsconfig-paths/register -r ts-node/register --extensions '.ts' ",
-    "run-sample2": "nodemon --exec ts-node src/sample.ts"
+    "run-sample": "ts-node src/sample.ts"
   },
-  "type": "module",
   "repository": {
     "type": "git",
     "url": "git+ssh://git@github.com/Chris927/express-warn.git"
