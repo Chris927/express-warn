@@ -1,8 +1,15 @@
 import express from "express";
+import warn from "./warn";
 
 const app = express();
 
-app.use("/test", (req, res) => res.send("test..."));
+const warnOnMissingQueryParam = warn({
+  keyFn: req => req.url,
+  warningFn: (req, res) =>
+    !req.query || !req.query.bla ? ['"bla" query parameter missing'] : []
+});
+
+app.use("/test", warnOnMissingQueryParam, (req, res) => res.send("test..."));
 
 const listener = app.listen(process.env.PORT || 3000);
 listener.on("listening", () =>

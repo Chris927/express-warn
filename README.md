@@ -1,5 +1,7 @@
 # Warn On Requests, Throttled
 
+:warning: Experimental, don't use yet.
+
 This package implements an [ExpressJS middleware](http://expressjs.com/en/guide/writing-middleware.html) to warn about arbitrary properties of requests.
 
 By default, the warning will be logged to the console. A warning can, however, do anything, e.g. call a web hook, or send an HTTP request elsewhere etc.

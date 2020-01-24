@@ -2,31 +2,33 @@ import { Request, Response, NextFunction } from "express";
 import { throttle } from "throttle-debounce";
 
 type Options = {
-  keyFn: (req: Request) => any;
-  mustWarnFn?: (v: any) => boolean;
+  keyFn?: (req: Request) => string;
+  warningFn?: (req: Request, res: Response) => any[];
   log?: (...args: any[]) => void;
   throttleMillis?: number;
 };
 
-export default (options: Options) => {
-  if (!options || !options.keyFn) {
-    throw new Error("'key' option is missing.");
-  }
-  const { keyFn } = options;
-  const warnFn =
-    options.mustWarnFn ||
-    function(v: any) {
-      return v ? true : false;
-    };
+type ThrottledLogger = (...args: any[]) => void;
+
+const throttledLoggers = new Map<string, ThrottledLogger>();
+
+export default (options: Options = {}) => {
+  const keyFn = options.keyFn || ((req: Request) => req.url);
+  const warningFn = options.warningFn || (() => undefined);
   const log =
     options.log ||
     ((...args: any[]): void => console.log.apply(["WARN", ...args]));
-  const throttleMillis = options.throttleMillis || 10 /* seconds */ * 1000;
-  const throttledLogger = throttle(throttleMillis, log);
   return function(req: Request, res: Response, next: NextFunction) {
-    const value = keyFn(req);
-    if (warnFn(value)) {
-      throttledLogger(value);
+    const key = keyFn(req);
+    let logger = throttledLoggers.get(key);
+    if (!logger) {
+      const throttleMillis = options.throttleMillis || 10 /* seconds */ * 1000;
+      logger = throttle(throttleMillis, log);
+      throttledLoggers.set(key, logger);
+    }
+    const warning = warningFn(req, res);
+    if (warning) {
+      logger(warning);
     }
     next();
   };
