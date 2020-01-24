@@ -3,8 +3,8 @@ import { throttle } from "throttle-debounce";
 
 type Options = {
   keyFn?: (req: Request) => string;
-  warningFn?: (req: Request, res: Response) => any[];
-  log?: (...args: any[]) => void;
+  warningFn?: (req: Request, res: Response) => Array<any> | undefined;
+  log?: (...args: Array<any>) => void;
   throttleMillis?: number;
 };
 
@@ -14,21 +14,23 @@ const throttledLoggers = new Map<string, ThrottledLogger>();
 
 export default (options: Options = {}) => {
   const keyFn = options.keyFn || ((req: Request) => req.url);
-  const warningFn = options.warningFn || (() => undefined);
+  const throttleMillis = options.throttleMillis || 10 /* seconds */ * 1000;
+  const warningFn = options.warningFn || (() => undefined); // TODO: does this make sense?
   const log =
     options.log ||
-    ((...args: any[]): void => console.log.apply(null, ["WARN", ...args]));
+    ((...args: any[]): void => {
+      console.log.apply(null, ["WARN", ...args]);
+    });
   return function(req: Request, res: Response, next: NextFunction) {
     const key = keyFn(req);
-    let logger = throttledLoggers.get(key);
-    if (!logger) {
-      const throttleMillis = options.throttleMillis || 10 /* seconds */ * 1000;
-      logger = throttle(throttleMillis, log);
-      throttledLoggers.set(key, logger);
+    let throttledLogger = throttledLoggers.get(key);
+    if (!throttledLogger) {
+      throttledLogger = throttle(throttleMillis, log);
+      throttledLoggers.set(key, throttledLogger);
     }
     const warning = warningFn(req, res);
     if (warning) {
-      logger(warning);
+      throttledLogger(...warning);
     }
     next();
   };

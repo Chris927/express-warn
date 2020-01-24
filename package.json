@@ -9,7 +9,7 @@
     "test": "jest",
     "check-types": "tsc",
     "clean": "rimraf dist",
-    "run-sample": "ts-node src/sample.ts"
+    "run-sample": "nodemon --exec ts-node src/sample.ts"
   },
   "repository": {
     "type": "git",

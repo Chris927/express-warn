@@ -6,7 +6,7 @@ const app = express();
 const warnOnMissingQueryParam = warn({
   keyFn: req => req.url,
   warningFn: (req, res) =>
-    !req.query || !req.query.bla ? ['"bla" query parameter missing'] : []
+    !req.query || !req.query.bla ? ['"bla" query parameter missing'] : undefined
 });
 
 app.use("/test", warnOnMissingQueryParam, (req, res) => res.send("test..."));
