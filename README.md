@@ -8,7 +8,11 @@ By default, the warning will be logged to the console. A warning can, however, d
 
 ## Example
 
-This middleware came to existance in order to warn when JWT tokens are almost expired. This would be implemented like this:
+This middleware came to existance in order to warn when JWT tokens are almost expired.
+
+Such warning can be created when a JWT token (or anything else warn-worthy) is encountered in a request. However, warning on every request would result in a flood of warnings, unless throttled. This package solves this.
+
+A (throttled) warning when encountering an almost expired token can be implemented like this:
 
 ```js
 const express = require('express');
@@ -27,6 +31,7 @@ const jwt = ...
 
 const warn = expressWarn({
   keyFn: req => req.token.userId,
+  throttleMillis: 60000, // defaults to 10000 (10 seconds)
   warningFn: req => {
     const { iat, userId } = req.token;
     const now = new Date().getTime() / 1000;
@@ -38,6 +43,7 @@ const warn = expressWarn({
   }
 });
 
+// the route(s) now use both the jwt and the warn middleware
 app.get('/protected', jwt, warn, (req, res, next) => {
   res.send('Here is protected information: abc')
 })

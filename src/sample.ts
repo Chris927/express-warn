@@ -5,6 +5,7 @@ const app = express();
 
 const warnOnMissingQueryParam = warn({
   keyFn: req => req.url,
+  throttleMillis: 2000, // defaults to 10 seconds
   warningFn: (req, res) =>
     !req.query || !req.query.bla ? ['"bla" query parameter missing'] : undefined
 });
